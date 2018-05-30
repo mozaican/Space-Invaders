@@ -1,30 +1,51 @@
 import turtle
 
+
 # screen
-win = turtle.Screen()
-win.bgcolor("black")
-win.title("Space Invaders")
+class Screen(turtle.Turtle):
+
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.screen = turtle.Screen()
+        self.screen.bgcolor("black")
+        self.screen.title("Space Invaders")
+
 
 # border
-border = turtle.Turtle()
-border.speed(0)
-border.color("white")
-border.penup()
-border.setposition(-300, -300)
-border.pendown()
-border.pensize(3)
-for side in range(4):
-    border.fd(600)
-    border.lt(90)
-border.hideturtle()
+class Border(turtle.Turtle):
+
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.speed(0)
+        self.color("white")
+        self.penup()
+        self.setposition(-300, -300)
+        self.pendown()
+        self.pensize(3)
+
+    def draw(self):
+        for side in range(4):
+            self.fd(600)
+            self.lt(90)
+        self.hideturtle()
+
 
 # player
-player = turtle.Turtle()
-player.color("red")
-player.shape("triangle")
-player.penup()
-player.speed(0)
-player.setposition(0, -255)
-player.setheading(90)
+class Player(turtle.Turtle):
 
-delay = input("Press q to quit the program")
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+        self.penup()
+        self.color("red")
+        self.shape("triangle")
+        self.speed(0)
+        self.setposition(0, -255)
+        self.setheading(90)
+
+
+if __name__ == "__main__":
+    screen = Screen()
+    border = Border()
+    border.draw()
+    player = Player()
+    delay = input("Press q to quit the program")
