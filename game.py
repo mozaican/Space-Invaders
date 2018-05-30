@@ -1,21 +1,17 @@
 import turtle
 
 
-# screen
 class Screen(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
+
+        # create screen
         self.screen = turtle.Screen()
         self.screen.bgcolor("black")
         self.screen.title("Space Invaders")
 
-
-# border
-class Border(turtle.Turtle):
-
-    def __init__(self):
-        turtle.Turtle.__init__(self)
+        # create border
         self.speed(0)
         self.color("white")
         self.penup()
@@ -23,18 +19,19 @@ class Border(turtle.Turtle):
         self.pendown()
         self.pensize(3)
 
-    def draw(self):
+        # draw border
         for side in range(4):
             self.fd(600)
             self.lt(90)
         self.hideturtle()
 
 
-# player
 class Player(turtle.Turtle):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
+
+        # create player
         self.penup()
         self.color("red")
         self.shape("triangle")
@@ -45,7 +42,5 @@ class Player(turtle.Turtle):
 
 if __name__ == "__main__":
     screen = Screen()
-    border = Border()
-    border.draw()
     player = Player()
     delay = input("Press q to quit the program")
