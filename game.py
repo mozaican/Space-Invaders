@@ -38,9 +38,27 @@ class Player(turtle.Turtle):
         self.speed(0)
         self.setposition(0, -255)
         self.setheading(90)
+        self.player_speed = 15
+
+    # move player left and right
+    def move_left(self):
+        x = self.xcor()
+        x -= self.player_speed  # x = -15
+        self.setx(x)
+
+    def move_right(self):
+        x = self.xcor()
+        x += self.player_speed  # x = 0
+        self.setx(x)
+
+    def binding(self):
+        self.screen.listen()
+        self.screen.onkey(self.move_left(), "Left")
+        self.screen.onkey(self.move_right(), "Right")
 
 
 if __name__ == "__main__":
     screen = Screen()
     player = Player()
-    delay = input("Press q to quit the program")
+    player.binding()
+    turtle.done()
