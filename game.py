@@ -42,19 +42,23 @@ class Player(turtle.Turtle):
 
     # move player left and right
     def move_left(self):
-        x = self.xcor()   # x = 0
-        x -= self.player_speed  # x = -15
+        x = self.xcor()
+        x -= self.player_speed
+        if x < -280:
+            x = -280
         self.setx(x)
 
     def move_right(self):
-        x = self.xcor()   # x = -15
-        x += self.player_speed  # x = 0
+        x = self.xcor()
+        x += self.player_speed
+        if x > 280:
+            x = 280
         self.setx(x)
 
     def binding(self):
         self.screen.listen()
-        self.screen.onkey(self.move_left(), "Left")
-        self.screen.onkey(self.move_right(), "Right")
+        self.screen.onkey(self.move_left, "Left")
+        self.screen.onkey(self.move_right, "Right")
 
 
 if __name__ == "__main__":
