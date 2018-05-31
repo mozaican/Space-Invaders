@@ -42,12 +42,12 @@ class Player(turtle.Turtle):
 
     # move player left and right
     def move_left(self):
-        x = self.xcor()
+        x = self.xcor()   # x = 0
         x -= self.player_speed  # x = -15
         self.setx(x)
 
     def move_right(self):
-        x = self.xcor()
+        x = self.xcor()   # x = -15
         x += self.player_speed  # x = 0
         self.setx(x)
 
