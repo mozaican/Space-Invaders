@@ -61,8 +61,43 @@ class Player(turtle.Turtle):
         self.screen.onkey(self.move_right, "Right")
 
 
+class Enemy(turtle.Turtle):
+
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+
+        # create enemy
+        self.color("blue")
+        self.shape("circle")
+        self.penup()
+        self.speed(0)
+        self.setposition(-200, 250)
+        self.enemy_speed = 2
+
+    # move enemy back and down
+    def move(self):
+        while True:
+            x = self.xcor()
+            x += self.enemy_speed
+            self.setx(x)
+
+            if self.xcor() > 280:
+                y = self.ycor()
+                y -= 30
+                self.enemy_speed *= -1
+                self.sety(y)
+
+            if self.xcor() < -280:
+                y = self.ycor()
+                y -= 30
+                self.enemy_speed *= -1
+                self.sety(y)
+
+
 if __name__ == "__main__":
     screen = Screen()
     player = Player()
     player.binding()
+    enemy = Enemy()
+    enemy.move()
     turtle.done()
