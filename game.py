@@ -94,17 +94,17 @@ class Enemy(turtle.Turtle):
                 self.sety(y)
 
 
-class Weapon(turtle.Turtle):
+class Weapon(Player):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
+        Player.__init__(self)
 
         # create the bullet
         self.color("yellow")
         self.shape("triangle")
         self.penup()
         self.speed(0)
-        self.setposition(0, -255)
         self.setheading(90)
         self.shapesize(0.5, 0.5)
         self.hideturtle()
@@ -113,10 +113,23 @@ class Weapon(turtle.Turtle):
 
     # make the bullet appear above the player
     def fire_bullet(self):
-        x = self.xcor()
-        y = self.ycor() + 10
-        self.setposition(x, y)
-        self.showturtle()
+        if self.bullet_state == "ready":
+            self.bullet_state = "fire"
+            x = player.xcor()
+            y = player.ycor() + 10
+            self.setposition(x, y)
+            self.showturtle()
+
+    # shoot the alien
+    def shoot(self):
+        while True:
+            y = self.ycor()
+            y += self.bullet_speed
+            self.sety(y)
+
+            if self.ycor() > 275:
+                self.hideturtle()
+                self.bullet_state = "ready"
 
     def binding(self):
         self.screen.onkey(self.fire_bullet, "space")
@@ -128,6 +141,7 @@ if __name__ == "__main__":
     player.binding()
     weapon = Weapon()
     weapon.binding()
+    weapon.shoot()
     enemy = Enemy()
     enemy.move()
     turtle.done()
