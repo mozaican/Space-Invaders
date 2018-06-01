@@ -1,5 +1,7 @@
-import turtle
 import math
+import random
+import turtle
+from turtle import Turtle
 
 
 class Screen(turtle.Turtle):
@@ -67,13 +69,23 @@ class Enemy(turtle.Turtle):
     def __init__(self):
         turtle.Turtle.__init__(self)
 
-        # create enemy
-        self.color("blue")
-        self.shape("circle")
-        self.penup()
-        self.speed(0)
-        self.setposition(-200, 250)
+        self.number_of_enemies = 5
+        self.enemies = []
         self.enemy_speed = 2
+
+        # add enemies to the list
+        for i in range(self.number_of_enemies):
+            self.enemies.append(turtle.Turtle())
+
+        for enemy in self.enemies:
+            # create enemy
+            enemy.color("blue")
+            enemy.shape("circle")
+            enemy.penup()
+            enemy.speed(0)
+            x = random.randint(-200, 200)
+            y = random.randint(100, 250)
+            enemy.setposition(x, y)
 
 
 class Weapon(Player):
@@ -118,22 +130,41 @@ class Game(Enemy, Weapon, Player):
         turtle.Turtle.__init__(self)
 
     def run(self):
+
         while True:
-            x = enemy.xcor()
-            x += enemy.enemy_speed
-            enemy.setx(x)
 
-            if enemy.xcor() > 280:
-                y = enemy.ycor()
-                y -= 30
-                enemy.enemy_speed *= -1
-                enemy.sety(y)
+            for e in enemy.enemies:
+                x = e.xcor()
+                x += enemy.enemy_speed
+                e.setx(x)
 
-            if enemy.xcor() < -280:
-                y = enemy.ycor()
-                y -= 30
-                enemy.enemy_speed *= -1
-                enemy.sety(y)
+                if e.xcor() > 280:
+                    y = e.ycor()
+                    y -= 30
+                    enemy.enemy_speed *= -1
+                    e.sety(y)
+
+                if e.xcor() < -280:
+                    y = e.ycor()
+                    y -= 30
+                    enemy.enemy_speed *= -1
+                    e.sety(y)
+
+                # check for a collision between the bullet and the enemy
+                if weapon.is_collision(weapon, e):
+                    # reset the bullet
+                    weapon.hideturtle()
+                    weapon.bullet_state = "ready"
+                    weapon.setposition(0, -400)
+                    # reset the enemy
+                    e.setposition(-200, 250)
+
+                # check if the enemy hits the player
+                if weapon.is_collision(player, e):
+                    player.hideturtle()
+                    e.hideturtle()
+                    print("Game Over")
+                    break
 
             y = weapon.ycor()
             y += weapon.bullet_speed
@@ -143,22 +174,6 @@ class Game(Enemy, Weapon, Player):
             if weapon.ycor() > 275:
                 weapon.hideturtle()
                 weapon.bullet_state = "ready"
-
-            # check for a collision between the bullet and the enemy
-            if self.is_collision(weapon, enemy):
-                # reset the bullet
-                weapon.hideturtle()
-                weapon.bullet_state = "ready"
-                weapon.setposition(0, -400)
-                # reset the enemy
-                enemy.setposition(-200, 250)
-
-            # check if the enemy hits the player
-            if self.is_collision(player, enemy):
-                player.hideturtle()
-                enemy.hideturtle()
-                print("Game Over")
-                break
 
 
 if __name__ == "__main__":
