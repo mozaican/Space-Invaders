@@ -171,7 +171,14 @@ class Game(Enemy, Weapon, Player):
                     weapon.bullet_state = "ready"
                     weapon.setposition(0, -400)
                     # reset the enemy
-                    e.setposition(-200, 250)
+                    x = random.randint(-200, 200)
+                    y = random.randint(100, 250)
+                    e.setposition(x, y)
+                    # update the score
+                    self.score += 10
+                    self.score_string = "Score: %s" % self.score
+                    self.score_pen.clear()
+                    self.score_pen.write(self.score_string, False, align="left", font=("Arial", 14, "normal"))
 
                 # check if the enemy hits the player
                 if weapon.is_collision(player, e):
