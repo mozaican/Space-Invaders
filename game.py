@@ -12,6 +12,9 @@ class Screen(turtle.Turtle):
         self.screen = turtle.Screen()
         self.screen.bgcolor("black")
         self.screen.title("Space Invaders")
+        self.screen.bgpic("img/background.png")
+        self.screen.register_shape("img/invader2.png")
+        self.screen.register_shape("img/player2.png")
 
         # create border
         self.speed(0)
@@ -36,7 +39,7 @@ class Player(turtle.Turtle):
         # create player
         self.penup()
         self.color("red")
-        self.shape("triangle")
+        self.shape("img/player2.png")
         self.speed(0)
         self.setposition(0, -255)
         self.setheading(90)
@@ -79,7 +82,7 @@ class Enemy(turtle.Turtle):
         for enemy in self.enemies:
             # create enemy
             enemy.color("blue")
-            enemy.shape("circle")
+            enemy.shape("img/invader2.png")
             enemy.penup()
             enemy.speed(0)
             x = random.randint(-200, 200)
@@ -127,11 +130,11 @@ class Game(Enemy, Weapon, Player):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
+
+        # create the game score
         self.score = 0
         self.score_pen = turtle.Turtle()
         self.score_string = "Score: %s" % self.score
-
-    def draw_score(self):
         self.score_pen.speed(0)
         self.score_pen.color("white")
         self.score_pen.penup()
@@ -205,9 +208,10 @@ if __name__ == "__main__":
     weapon.binding()
     enemy = Enemy()
     game = Game()
-    game.draw_score()
     game.run()
     turtle.done()
 
 # TODO:   Fix the enemies -> when they reach the bottom of the screen
 # TODO:   make them move left/right (now they are passing below the screen).
+
+# TODO:   Fix the register_shape -> bad arguments
