@@ -1,4 +1,5 @@
 import turtle
+import math
 
 
 class Screen(turtle.Turtle):
@@ -100,11 +101,18 @@ class Weapon(Player):
             self.setposition(x, y)
             self.showturtle()
 
+    def is_collision(self, t1, t2):
+        distance = math.sqrt(math.pow(t1.xcor() - t2.xcor(), 2) + math.pow(t1.ycor() - t2.ycor(), 2))
+        if distance < 15:
+            return True
+        else:
+            return False
+
     def binding(self):
         self.screen.onkey(self.fire_bullet, "space")
 
 
-class Game(Enemy, Weapon):
+class Game(Enemy, Weapon, Player):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
@@ -131,9 +139,26 @@ class Game(Enemy, Weapon):
             y += weapon.bullet_speed
             weapon.sety(y)
 
+            # check if the bullet has gone to the top
             if weapon.ycor() > 275:
                 weapon.hideturtle()
                 weapon.bullet_state = "ready"
+
+            # check for a collision between the bullet and the enemy
+            if self.is_collision(weapon, enemy):
+                # reset the bullet
+                weapon.hideturtle()
+                weapon.bullet_state = "ready"
+                weapon.setposition(0, -400)
+                # reset the enemy
+                enemy.setposition(-200, 250)
+
+            # check if the enemy hits the player
+            if self.is_collision(player, enemy):
+                player.hideturtle()
+                enemy.hideturtle()
+                print("Game Over")
+                break
 
 
 if __name__ == "__main__":
