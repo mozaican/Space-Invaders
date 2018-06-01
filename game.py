@@ -74,31 +74,11 @@ class Enemy(turtle.Turtle):
         self.setposition(-200, 250)
         self.enemy_speed = 2
 
-    # move enemy back and down
-    def move(self):
-        while True:
-            x = self.xcor()
-            x += self.enemy_speed
-            self.setx(x)
-
-            if self.xcor() > 280:
-                y = self.ycor()
-                y -= 30
-                self.enemy_speed *= -1
-                self.sety(y)
-
-            if self.xcor() < -280:
-                y = self.ycor()
-                y -= 30
-                self.enemy_speed *= -1
-                self.sety(y)
-
 
 class Weapon(Player):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
-        Player.__init__(self)
 
         # create the bullet
         self.color("yellow")
@@ -120,19 +100,40 @@ class Weapon(Player):
             self.setposition(x, y)
             self.showturtle()
 
-    # shoot the alien
-    def shoot(self):
-        while True:
-            y = self.ycor()
-            y += self.bullet_speed
-            self.sety(y)
-
-            if self.ycor() > 275:
-                self.hideturtle()
-                self.bullet_state = "ready"
-
     def binding(self):
         self.screen.onkey(self.fire_bullet, "space")
+
+
+class Game(Enemy, Weapon):
+
+    def __init__(self):
+        turtle.Turtle.__init__(self)
+
+    def run(self):
+        while True:
+            x = enemy.xcor()
+            x += enemy.enemy_speed
+            enemy.setx(x)
+
+            if enemy.xcor() > 280:
+                y = enemy.ycor()
+                y -= 30
+                enemy.enemy_speed *= -1
+                enemy.sety(y)
+
+            if enemy.xcor() < -280:
+                y = enemy.ycor()
+                y -= 30
+                enemy.enemy_speed *= -1
+                enemy.sety(y)
+
+            y = weapon.ycor()
+            y += weapon.bullet_speed
+            weapon.sety(y)
+
+            if weapon.ycor() > 275:
+                weapon.hideturtle()
+                weapon.bullet_state = "ready"
 
 
 if __name__ == "__main__":
@@ -141,7 +142,7 @@ if __name__ == "__main__":
     player.binding()
     weapon = Weapon()
     weapon.binding()
-    weapon.shoot()
     enemy = Enemy()
-    enemy.move()
+    game = Game()
+    game.run()
     turtle.done()
