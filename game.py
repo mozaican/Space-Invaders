@@ -127,6 +127,17 @@ class Game(Enemy, Weapon, Player):
 
     def __init__(self):
         turtle.Turtle.__init__(self)
+        self.score = 0
+        self.score_pen = turtle.Turtle()
+        self.score_string = "Score: %s" % self.score
+
+    def draw_score(self):
+        self.score_pen.speed(0)
+        self.score_pen.color("white")
+        self.score_pen.penup()
+        self.score_pen.setposition(-290, 280)
+        self.score_pen.write(self.score_string, False, align="left", font=("Arial", 14, "normal"))
+        self.score_pen.hideturtle()
 
     def run(self):
 
@@ -187,5 +198,9 @@ if __name__ == "__main__":
     weapon.binding()
     enemy = Enemy()
     game = Game()
+    game.draw_score()
     game.run()
     turtle.done()
+
+# TODO:   Fix the enemies -> when they reach the bottom of the screen
+# TODO:   make them move left/right (now they are passing below the screen).
