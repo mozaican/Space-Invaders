@@ -1,7 +1,6 @@
 import math
 import random
 import turtle
-from turtle import Turtle
 
 
 class Screen(turtle.Turtle):
@@ -134,21 +133,25 @@ class Game(Enemy, Weapon, Player):
         while True:
 
             for e in enemy.enemies:
+                # move the enemy
                 x = e.xcor()
                 x += enemy.enemy_speed
                 e.setx(x)
 
+                # move the enemies back and down
                 if e.xcor() > 280:
-                    y = e.ycor()
-                    y -= 30
+                    for i in enemy.enemies:
+                        y = i.ycor()
+                        y -= 40
+                        i.sety(y)
                     enemy.enemy_speed *= -1
-                    e.sety(y)
 
                 if e.xcor() < -280:
-                    y = e.ycor()
-                    y -= 30
+                    for i in enemy.enemies:
+                        y = i.ycor()
+                        y -= 40
+                        i.sety(y)
                     enemy.enemy_speed *= -1
-                    e.sety(y)
 
                 # check for a collision between the bullet and the enemy
                 if weapon.is_collision(weapon, e):
