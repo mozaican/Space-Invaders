@@ -13,8 +13,6 @@ class Screen(turtle.Turtle):
         self.screen.bgcolor("black")
         self.screen.title("Space Invaders")
         self.screen.bgpic("img/background.png")
-        self.screen.register_shape("img/invader2.png")
-        self.screen.register_shape("img/player2.png")
 
         # create border
         self.speed(0)
@@ -39,7 +37,8 @@ class Player(turtle.Turtle):
         # create player
         self.penup()
         self.color("red")
-        self.shape("img/player2.png")
+        self.screen.register_shape("img/player_mo.gif")
+        self.shape("img/player_mo.gif")
         self.speed(0)
         self.setposition(0, -255)
         self.setheading(90)
@@ -82,7 +81,8 @@ class Enemy(turtle.Turtle):
         for enemy in self.enemies:
             # create enemy
             enemy.color("blue")
-            enemy.shape("img/invader2.png")
+            enemy.screen.register_shape("img/invader_mo.gif")
+            enemy.shape("img/invader_mo.gif")
             enemy.penup()
             enemy.speed(0)
             x = random.randint(-200, 200)
