@@ -1,12 +1,12 @@
 import math
 import random
 import turtle
+from typing import List
 
 
 class Screen(turtle.Turtle):
-
     def __init__(self):
-        turtle.Turtle.__init__(self)
+        super().__init__()
 
         # create screen
         self.screen = turtle.Screen()
@@ -32,9 +32,8 @@ class Screen(turtle.Turtle):
 
 
 class Player(turtle.Turtle):
-
     def __init__(self):
-        turtle.Turtle.__init__(self)
+        super().__init__()
 
         # create player
         self.penup()
@@ -44,6 +43,11 @@ class Player(turtle.Turtle):
         self.setposition(0, -255)
         self.setheading(90)
         self.player_speed = 15
+
+        # binding
+        self.screen.listen()
+        self.screen.onkey(self.move_left, "Left")
+        self.screen.onkey(self.move_right, "Right")
 
     # move player left and right
     def move_left(self):
@@ -60,40 +64,25 @@ class Player(turtle.Turtle):
             x = 280
         self.setx(x)
 
-    def binding(self):
-        self.screen.listen()
-        self.screen.onkey(self.move_left, "Left")
-        self.screen.onkey(self.move_right, "Right")
-
 
 class Enemy(turtle.Turtle):
-
     def __init__(self):
-        turtle.Turtle.__init__(self)
-
-        self.number_of_enemies = 5
-        self.enemies = []
+        super().__init__()
         self.enemy_speed = 2
 
-        # add enemies to the list
-        for i in range(self.number_of_enemies):
-            self.enemies.append(turtle.Turtle())
-
-        for enemy in self.enemies:
-            # create enemy
-            enemy.color("blue")
-            enemy.shape("img/invader2.png")
-            enemy.penup()
-            enemy.speed(0)
-            x = random.randint(-200, 200)
-            y = random.randint(100, 250)
-            enemy.setposition(x, y)
+        # create enemy
+        self.color("blue")
+        self.shape("img/invader2.png")
+        self.penup()
+        self.speed(0)
+        x = random.randint(-200, 200)
+        y = random.randint(100, 250)
+        self.setposition(x, y)
 
 
-class Weapon(Player):
-
+class Weapon(turtle.Turtle):
     def __init__(self):
-        turtle.Turtle.__init__(self)
+        super().__init__()
 
         # create the bullet
         self.color("yellow")
@@ -105,6 +94,9 @@ class Weapon(Player):
         self.hideturtle()
         self.bullet_speed = 20
         self.bullet_state = "ready"
+
+        # binding
+        self.screen.onkey(self.fire_bullet, "space")
 
     # make the bullet appear above the player
     def fire_bullet(self):
@@ -122,14 +114,14 @@ class Weapon(Player):
         else:
             return False
 
-    def binding(self):
-        self.screen.onkey(self.fire_bullet, "space")
 
-
-class Game(Enemy, Weapon, Player):
-
-    def __init__(self):
-        turtle.Turtle.__init__(self)
+class Game:
+    def __init__(self, player: Player, enemies: List[Enemy], weapon: Weapon):
+        super().__init__()
+        
+        self.player = player
+        self.enemies = enemies
+        self.weapon = weapon
 
         # create the game score
         self.score = 0
@@ -143,36 +135,34 @@ class Game(Enemy, Weapon, Player):
         self.score_pen.hideturtle()
 
     def run(self):
-
         while True:
-
-            for e in enemy.enemies:
+            for e in self.enemies:
                 # move the enemy
                 x = e.xcor()
-                x += enemy.enemy_speed
+                x += e.enemy_speed
                 e.setx(x)
 
                 # move the enemies back and down
                 if e.xcor() > 280:
-                    for i in enemy.enemies:
+                    for i in self.enemies:
                         y = i.ycor()
                         y -= 40
                         i.sety(y)
-                    enemy.enemy_speed *= -1
+                    e.enemy_speed *= -1
 
                 if e.xcor() < -280:
-                    for i in enemy.enemies:
+                    for i in self.enemies:
                         y = i.ycor()
                         y -= 40
                         i.sety(y)
-                    enemy.enemy_speed *= -1
+                    e.enemy_speed *= -1
 
                 # check for a collision between the bullet and the enemy
-                if weapon.is_collision(weapon, e):
+                if self.weapon.is_collision(self.weapon, e):
                     # reset the bullet
-                    weapon.hideturtle()
-                    weapon.bullet_state = "ready"
-                    weapon.setposition(0, -400)
+                    self.weapon.hideturtle()
+                    self.weapon.bullet_state = "ready"
+                    self.weapon.setposition(0, -400)
                     # reset the enemy
                     x = random.randint(-200, 200)
                     y = random.randint(100, 250)
@@ -184,31 +174,32 @@ class Game(Enemy, Weapon, Player):
                     self.score_pen.write(self.score_string, False, align="left", font=("Arial", 14, "normal"))
 
                 # check if the enemy hits the player
-                if weapon.is_collision(player, e):
+                if self.weapon.is_collision(player, e):
                     player.hideturtle()
                     e.hideturtle()
                     print("Game Over")
                     break
 
-            y = weapon.ycor()
-            y += weapon.bullet_speed
-            weapon.sety(y)
+            y = self.weapon.ycor()
+            y += self.weapon.bullet_speed
+            self.weapon.sety(y)
 
             # check if the bullet has gone to the top
-            if weapon.ycor() > 275:
-                weapon.hideturtle()
-                weapon.bullet_state = "ready"
+            if self.weapon.ycor() > 275:
+                self.weapon.hideturtle()
+                self.weapon.bullet_state = "ready"
 
 
 if __name__ == "__main__":
     screen = Screen()
+
     player = Player()
-    player.binding()
+    enemies = [Enemy() for _ in range(5)]
     weapon = Weapon()
-    weapon.binding()
-    enemy = Enemy()
-    game = Game()
+
+    game = Game(player, enemies, weapon)
     game.run()
+
     turtle.done()
 
 # TODO:   Fix the enemies -> when they reach the bottom of the screen
