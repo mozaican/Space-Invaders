@@ -167,6 +167,9 @@ class Game(Enemy, Weapon, Player):
                         i.sety(y)
                     enemy.enemy_speed *= -1
 
+                if e.ycor() < -280:
+                    e.hideturtle()
+
                 # check for a collision between the bullet and the enemy
                 if weapon.is_collision(weapon, e):
                     # reset the bullet
@@ -211,7 +214,5 @@ if __name__ == "__main__":
     game.run()
     turtle.done()
 
-# TODO:   Fix the enemies -> when they reach the bottom of the screen
-# TODO:   make them move left/right (now they are passing below the screen).
 
-# TODO:   Fix the register_shape -> bad arguments
+
